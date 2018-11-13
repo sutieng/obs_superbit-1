@@ -1,0 +1,15 @@
+#Put the top-level repositories you want to use here.
+#It's recursive, so setting-up pipe_tasks here will automatically
+#setup all the repositories pipe_tasks requires, and so on...
+setupRequired(pipe_tasks)
+setupRequired(pipe_drivers)
+
+#If you need to build your own astrometry_net index files,
+#(and I'm guessing you will) you'll need to setup that
+#here as well. For example:
+#setupRequired(astrometry_net_data superbit)
+
+#This just sets your paths; I don't think you need to
+#do anything here...
+envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
+envPrepend(PATH, ${PRODUCT_DIR}/bin)
