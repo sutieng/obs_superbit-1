@@ -17,6 +17,13 @@
 
 #Within the template strings are variables (e.g., %(filter)s), which the
 #stack obtains from the registry of exposures when the data is ingested. 
+
+#The policy file also controls whether the output data is compressed. For
+#example, 'recipe: lossyBasic' tells the stack to use lossy compression to
+#save data (this *sounds* dangerous, but is actually pretty safe and you
+#should consider using lossy compression if you're going to be storing lots
+#of data. I'm v. impressed with how careful the stack people have been
+#with this).
 ###########################################################################
 
 #First, tell the stack that it needs to set up a registry of calibration
@@ -33,16 +40,64 @@ defaultLevel: Ccd
 
 #Tell the stack where and how to store raw and processed image files
 #(i.e., exposures)
-#'recipe: lossyBasic' tells the stack to use lossy compression to save data
-#(this *sounds* dangerous, but is actually pretty safe and you should
-#consider using lossy compression if you're going to be storing lots of
-#data. I'm v. impressed with how careful the stack people have been
-#with this).
+
 exposures:
        raw:
          python: lsst.afw.image.DecoratedImageF
-	 persistable: DecoratedImageF
-	 template: raw/%(dateObs)s/%(filter)s/%(dataType)s-%(ccd)s-%(run)s.fits
+         persistable: DecoratedImageF
+         template: raw/%(dateObs)s/%(filter)s/%(dataType)s-%(ccd)s-%(run)s.fits
       postISRCCD:
          template: postISRCCD/%(dateObs)s/%(filter)s/postISRCCD-%(ccd)s-%(visit)s-%(run)s.fits
-	 recipe: lossyBasic
+         recipe: lossyBasic
+      calexp:
+         template: sci-results/%(dateObs)s/%(filter)s/calexp/calexp-%(ccd)s-%(run)s.fits
+         recipe: lossyBasic
+#      icExp:
+#         columns:
+#               - visit
+#               - ccd
+#          template: sci-results/%(dateObs)s/%(filter)s/icExp/icExp-%(ccd)s-%(run)s.fits
+
+calibrations:
+       bias:
+         python: lsst.afw.image.ImageF
+         persistable: ImageF
+         level: Ccd
+         tables: bias
+         columns:
+               - ccd
+               - taiObs
+         reference: raw_visit
+         refCols: ccd
+         refCols: filter
+         validRange: true
+         template: BIAS/BIAS_%(ccd)s_%(calibDate)s.fits
+
+       dark:
+         python: lsst.afw.image.ImageF
+         persistable: ImageF
+         level: Ccd
+         tables: dark
+         columns:
+               - ccd
+               - taiObs
+         reference: raw_visit
+         refCols: ccd
+         refCols: filter
+         validRange: true
+         template: DARK/DARK_%(ccd)s_%(calibDate)s.fits
+
+       flat:
+         python: lsst.afw.image.ImageF
+         persistable: ImageF
+         level: Ccd
+         tables: flat
+         columns:
+               - ccd
+               - taiObs
+         reference: raw_visit
+         refCols: ccd
+         refCols: filter
+         validRange: true
+         template: FLAT/%(filter)s/FLAT_%(ccd)s_%(calibDate)s.fits
+
