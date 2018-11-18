@@ -1,0 +1,48 @@
+#This Policy file tells the stack where to read and write data to,
+#and the format that that data should take.
+#There are a few things in here which I only have a vague understanding
+#of (mostly regarding levels and tables); the most important
+#things are, however, `template`, `python` and `persistable`, which tell
+#the stack the path to your data, and the format it's stored in.
+
+#I've found the most useful information regarding the policy file is in:
+#obs_base/python/lsst/obs/base/mapping.py
+
+#Note that the stack has its own set of default policies contained within:
+#obs_base/policy
+#The information in here overrides these defaults, but if the stack doesn't
+#find the information it needs here, it'll defer to the obs_base defaults.
+#Hence the reason why some policies only contain a couple of lines, with
+#the rest of the information for that policy being picked up from obs_base.
+
+#Within the template strings are variables (e.g., %(filter)s), which the
+#stack obtains from the registry of exposures when the data is ingested. 
+###########################################################################
+
+#First, tell the stack that it needs to set up a registry of calibration
+#frames:
+needCalibRegistry: true
+
+#Then tell the stack where to find your camera and defects files:
+camera: ../camera
+defects: ../defects
+
+#Tell the stack what default level to assume your data is held at
+#(options include "Amp", "Ccd", "SkyTile").
+defaultLevel: Ccd
+
+#Tell the stack where and how to store raw and processed image files
+#(i.e., exposures)
+#'recipe: lossyBasic' tells the stack to use lossy compression to save data
+#(this *sounds* dangerous, but is actually pretty safe and you should
+#consider using lossy compression if you're going to be storing lots of
+#data. I'm v. impressed with how careful the stack people have been
+#with this).
+exposures:
+       raw:
+         python: lsst.afw.image.DecoratedImageF
+	 persistable: DecoratedImageF
+	 template: raw/%(dateObs)s/%(filter)s/%(dataType)s-%(ccd)s-%(run)s.fits
+      postISRCCD:
+         template: postISRCCD/%(dateObs)s/%(filter)s/postISRCCD-%(ccd)s-%(visit)s-%(run)s.fits
+	 recipe: lossyBasic
