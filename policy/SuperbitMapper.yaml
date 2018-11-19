@@ -68,8 +68,9 @@ calibrations:
                - ccd
                - taiObs
          reference: raw_visit
-         refCols: ccd
-         refCols: filter
+         refCols:
+               - ccd
+               - filter
          validRange: true
          template: BIAS/BIAS_%(ccd)s_%(calibDate)s.fits
 
@@ -82,8 +83,9 @@ calibrations:
                - ccd
                - taiObs
          reference: raw_visit
-         refCols: ccd
-         refCols: filter
+         refCols:
+               - ccd
+               - filter
          validRange: true
          template: DARK/DARK_%(ccd)s_%(calibDate)s.fits
 
@@ -96,8 +98,34 @@ calibrations:
                - ccd
                - taiObs
          reference: raw_visit
-         refCols: ccd
-         refCols: filter
+         refCols:
+               - ccd
+               - filter
          validRange: true
          template: FLAT/%(filter)s/FLAT_%(ccd)s_%(calibDate)s.fits
 
+datasets:
+       icExpBackground:
+         template: 'sci-results/%(dateObs)s/%(filter)s/icExp/bkgd-icExp-%(ccd)s-%(run)s.fits'
+       calexpBackground:
+         template: 'sci-results/%(dateObs)s/%(filter)s/calexp/bkgd-calexp-%(ccd)s-%(run)s.fits'
+       src:
+         template: 'sci-results/%(dateObs)s/%(filter)s/calexp/bkgd-calexp-%(ccd)s-%(run)s.fits'
+       icSrc:
+         template: 'sci-results/%(dateObs)s/%(filter)s/icSrc/icSrc-%(ccd)s-%(visit)s.fits'
+       srcMatch:
+         template: 'sci-results/%(dateObs)s/%(filter)s/src/SRCMATCH-%(ccd)s-%(visit)s.fits'
+#       singleFrameDriver_metadata:
+#         persistable: PropertySet
+#         python: lsst.daf.base.PropertySet
+#         storage: BoostStorage
+#         tables:
+#              - raw
+#              - raw_visit
+#         template: 'singleFrameDriver_metadata/%(dateObs)s/%(filter)s/calexp-%(ccd)s-%(visit)s.boost'
+#       wcs:
+#         persistable: ExposureF
+#         python: lsst.afw.ExposureF
+#         template: '%(visit)s/calexp/wcs-%(visit)s_%(ccd)s.fits'
+
+	 
