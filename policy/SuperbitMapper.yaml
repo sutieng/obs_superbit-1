@@ -127,5 +127,3 @@ datasets:
 #         persistable: ExposureF
 #         python: lsst.afw.ExposureF
 #         template: '%(visit)s/calexp/wcs-%(visit)s_%(ccd)s.fits'
-
-	 
