@@ -4,6 +4,7 @@ from lsst.daf.persistence import Policy
 from lsst.obs.base import CameraMapper
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.image as afwImage
+from .makeSuperbitRawVisitInfo import MakeSuperbitRawVisitInfo
 
 class SuperbitMapper(CameraMapper):
     """
@@ -19,7 +20,7 @@ class SuperbitMapper(CameraMapper):
 
     #MakeSuperBitRawVisitInfo grabs information from the header.
     #Take a look at makeSuperbitRawVisitInfo in this same directory.
-    MakeRawVisitInfoClass = MakeSuperBitRawVisitInfo
+    MakeRawVisitInfoClass = MakeSuperbitRawVisitInfo
 
     def __init__(self, inputPolicy=None, **kwargs):
 
@@ -32,19 +33,19 @@ class SuperbitMapper(CameraMapper):
         #Instantiate the parent class (CameraMapper) with the policy file:
         super(SuperbitMapper, self).__init__(policy, os.path.dirname(policyFile), **kwargs)
 
-         #Ensure each dataset type of interest knows about the full range
-         #of keys available from the registry. This means a minimal set of
-         #--id's need to be specified, and the stack will find the rest.
-         keys = {'field': str,
-                 'dateObs':str,
-                 'taiObs':str}
-         for name in ("raw",
-                      "postISRCCD",
-                      "calexp",
-                      "src",
-                      "icSrc",
-                      "srcMatch"):
-             self.mappings[name].keyDict.update(keys)
+        #Ensure each dataset type of interest knows about the full range
+        #of keys available from the registry. This means a minimal set of
+        #--id's need to be specified, and the stack will find the rest.
+        keys = {'filter':str,
+                'dateObs':str,
+                'taiObs':str}
+        for name in ("raw",
+                     "postISRCCD",
+                     "calexp",
+                     "src",
+                     "icSrc",
+                     "srcMatch"):
+            self.mappings[name].keyDict.update(keys)
          
         #Define the filters in the filter registry
         afwImageUtils.defineFilter(name='R',  lambdaEff=635.9, alias=['R'])

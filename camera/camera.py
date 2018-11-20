@@ -1,21 +1,22 @@
 import lsst.afw.cameraGeom.cameraConfig
 
 #Set the plate scale in arcsec/mm:
+#Not strictly necessary.
 #config.plateScale=206.67
 
 #This defines the native coordinate system:
 #FocalPlane is (x,y) in mm (rather than radians or pixels, for example).
-#config.transformDict.nativeSys='FocalPlane'
+config.transformDict.nativeSys='FocalPlane'
 
 #For some reason, it must have "FieldAngle" transform defined:
-#config.transformDict.transforms={}
-#config.transformDict.transforms['FieldAngle']=lsst.afw.geom.transformConfig.TransformConfig()
+config.transformDict.transforms={}
+config.transformDict.transforms['FieldAngle']=lsst.afw.geom.transformConfig.TransformConfig()
 
 # coeffs = [0,1] is the default. This is only necessary if you want to convert
 #between positions on the focal plane.
-#config.transformDict.transforms['FieldAngle'].transform['inverted'].transform.retarget(target=lsst.afw.geom.transformRegistry['radial'])
-#config.transformDict.transforms['FieldAngle'].transform['inverted'].transform.coeffs=[0.0, 1.0]
-#config.transformDict.transforms['FieldAngle'].transform.name='inverted'
+config.transformDict.transforms['FieldAngle'].transform['inverted'].transform.retarget(target=lsst.afw.geom.transformRegistry['radial'])
+config.transformDict.transforms['FieldAngle'].transform['inverted'].transform.coeffs=[0.0, 1.0]
+config.transformDict.transforms['FieldAngle'].transform.name='inverted'
 
 #Define a list of detectors:
 #If you have more than one detector, just repeat what is here for
@@ -64,3 +65,9 @@ config.detectorList[0].offset_y=0.
 config.detectorList[0].yawDeg=0.0
 config.detectorList[0].rollDeg=0.0
 config.detectorList[0].pitchDeg=0.0
+
+# Serial string associated with this specific detector
+config.detectorList[0].serial='0'
+
+# ID of detector slot
+config.detectorList[0].id=0

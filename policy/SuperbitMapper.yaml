@@ -45,14 +45,14 @@ exposures:
        raw:
          python: lsst.afw.image.DecoratedImageF
          persistable: DecoratedImageF
-         template: raw/%(dateObs)s/%(filter)s/%(dataType)s-%(ccd)s-%(run)s.fits
-      postISRCCD:
+         template: raw/%(dateObs)s/%(filter)s/%(dataType)s-%(visit)s.fits
+       postISRCCD:
          template: postISRCCD/%(dateObs)s/%(filter)s/postISRCCD-%(ccd)s-%(visit)s-%(run)s.fits
          recipe: lossyBasic
-      calexp:
+       calexp:
          template: sci-results/%(dateObs)s/%(filter)s/calexp/calexp-%(ccd)s-%(run)s.fits
          recipe: lossyBasic
-#      icExp:
+#     icExp:
 #         columns:
 #               - visit
 #               - ccd
