@@ -36,7 +36,10 @@ class SuperbitMapper(CameraMapper):
         #Ensure each dataset type of interest knows about the full range
         #of keys available from the registry. This means a minimal set of
         #--id's need to be specified, and the stack will find the rest.
-        keys = {'filter':str,
+        keys = {'visit':int,
+                'filter':str,
+                'dataType':str,
+                'expTime':float,
                 'dateObs':str,
                 'taiObs':str}
         for name in ("raw",
