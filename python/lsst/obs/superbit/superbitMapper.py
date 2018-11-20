@@ -51,6 +51,7 @@ class SuperbitMapper(CameraMapper):
             self.mappings[name].keyDict.update(keys)
          
         #Define the filters in the filter registry
+        #I've just guessed these...
         afwImageUtils.defineFilter(name='R',  lambdaEff=635.9, alias=['R'])
         afwImageUtils.defineFilter(name='G',  lambdaEff=534.9, alias=['G'])
         afwImageUtils.defineFilter(name='B',  lambdaEff=446.6, alias=['B'])
