@@ -19,5 +19,7 @@ processCcd.py --show config
 #You don't have to write out the ISR image (but it
 #can be useful to do so).
 config.isr.doWrite = True
-
+config.isr.doBias = True
+config.isr.doDark=True
+config.isr.doFlat=True
 
