@@ -3,8 +3,8 @@ import lsst.afw.geom as afwGeom
 import numpy as np
 
 # This is the readout noise and gain of our amps: 
-readout = [[22.3,23.1],[23.0,22.1],[23.0,24.4]]
-gain_all = [[0.53,0.54],[0.52,0.52],[0.59,0.59]]
+readout = [[12]]
+gain_all = [[0.53,0.54],[0.52,0.52],[0.59,0.59]]  ##not sure the value
 
 def addAmp(ampCatalog,i,rN,gain_s):
 
@@ -13,21 +13,21 @@ def addAmp(ampCatalog,i,rN,gain_s):
 
     #This needs to be the full dimension of what your amp outputs,
     #including overscan, any dummy pixels etc etc.:
-    width = 6666
-    height = 4454
+    width = 6665 
+    height = 4453 
 
-    os = 10 #pixels of overscan
+    os = 20   #pixels of overscan
 
     #This is the dimensions of the active region of your amp:
-    bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(6602, 4366))
+    bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(6576, 4384))
 
     #If your CCD consists of more than one amp, you'll need to
     #some of them (i.e., the one on the right is shifted by X pixels)
-    bbox.shift(afwGeom.Extent2I(6602*i,0))
+    bbox.shift(afwGeom.Extent2I(6576*i,0))
 
     #Define the gain, saturation and readout noise:
     gain = gain_s
-    saturation = 65535
+    saturation = 65535  ##not sure
     readNoise = rN
 
     #Which corner is the data read out from?
@@ -44,14 +44,15 @@ def addAmp(ampCatalog,i,rN,gain_s):
     #This defines the data region. Here, there are 64 pixels to the
     #left of the the left amp that don't take data. There are 44 pixels
     #on the top and bottom of the amps that don't take data.
-    rawDataBBox = afwGeom.Box2I(afwGeom.Point2I(64 if i==0 else 0, 44), afwGeom.Extent2I(6602,4366))
-
-    #Here, I define the overscan boxes. These are 10 pixels to the left of the left anmp
+    
+    rawDataBBox = afwGeom.Box2I(afwGeom.Point2I(45 if i==0 else 0, 34), afwGeom.Extent2I(6576,4384))
+    # These are 20 pixels to the left of the left anmp
     #(1 pixel in) and 10 pixels to the right of the right amp. The overscan runs the
     #full top to bottom length of the detector.
-    rawHorizontalOverscanBBox = afwGeom.Box2I(afwGeom.Point2I(1 if i==0 else width-os-1, 0), afwGeom.Extent2I(os, height))
-    #rawVerticalOverscanBBox = afwGeom.Box2I(afwGeom.Point2I(50, 6132), afwGeom.Extent2I(0, 0))
-    #rawPrescanBBox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(0, 0))
+    #rawHorizontalOverscanBBox = afwGeom.Box2I(afwGeom.Point2I(1 if i==0 else width-os-1, 0), afwGeom.Extent2I(os, height))
+    rawHorizontalOverscanBBox = afwGeom.Box2I(afwGeom.Point2I(6634 , 0), afwGeom.Extent2I(os, height))
+    rawVerticalOverscanBBox = afwGeom.Box2I(afwGeom.Point2I(45, 1), afwGeom.Extent2I(6576, os))
+    rawPrescanBBox = afwGeom.Box2I(afwGeom.Point2I(12, 0), afwGeom.Extent2I(os, height))
     emptyBox = afwGeom.BoxI()
 
     #Shift the right amp to the right by the full width:
@@ -76,9 +77,9 @@ def addAmp(ampCatalog,i,rN,gain_s):
     record.setRawXYOffset(rawXYOffset)
     record.setRawDataBBox(rawDataBBox)
     record.setRawHorizontalOverscanBBox(rawHorizontalOverscanBBox)
-    record.setRawVerticalOverscanBBox(emptyBox) #We don't have any Vertical OS
-    record.setRawPrescanBBox(emptyBox) #...nor prescan.
-    
+    record.setRawVerticalOverscanBBox(rawVerticalOverscanBBox)
+    record.setRawPrescanBBox(rawPrescanBBox)
+
 def makeCcd(ccdId):
     '''
     Make a CCD out of a set of amps
