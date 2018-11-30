@@ -4,7 +4,7 @@ import numpy as np
 
 # This is the readout noise and gain of our amps: 
 readout = [[12,12,12,12]]
-gain_all = [[0.53,0.54,0.54,0.54],[0.52,0.52],[0.59,0.59]]  ##not sure the value
+gain_all = [[0.53,0.54,0.54,0.54]]  ##not sure the value
 
 def addAmp(ampCatalog,i,rN,gain_s):
 
