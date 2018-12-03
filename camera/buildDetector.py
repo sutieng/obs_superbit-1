@@ -61,7 +61,7 @@ def addAmp(ampCatalog,i,rN,gain_s):
     emptyBox = afwGeom.BoxI()
 
     #Shift the right amp to the right by the full width:
-    shiftp = afwGeom.Extent2I((width)*1 if (i==1 or i==3) else 0,(height)*1 if (i==2 or i==3) else 0)
+    shiftp = afwGeom.Extent2I(width if (i==1 or i==3) else 0, height if (i==2 or i==3) else 0)
     rawBBox.shift(shiftp)
     rawDataBBox.shift(shiftp)
     rawHorizontalOverscanBBox.shift(shiftp)
