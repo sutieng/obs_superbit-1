@@ -23,7 +23,7 @@ def addAmp(ampCatalog,i,rN,gain_s):
 
     #If your CCD consists of more than one amp, you'll need to
     #some of them (i.e., the one on the right is shifted by X pixels)
-    bbox.shift(afwGeom.Extent2I(3288*1 if (i==1 or i==3) else 0, 2192*1 if (i==2 or i==3) else 0))
+    bbox.shift(afwGeom.Extent2I(3288 if (i==1 or i==3) else 0, 2192 if (i==2 or i==3) else 0))
 
     #Define the gain, saturation and readout noise:
     gain = gain_s
