@@ -42,7 +42,8 @@ config.detectorList[0].name='ccd0_superbit'
 
 # Pixel size in mm
 config.detectorList[0].pixelSize_x=0.005
-config.detectorList[0].pixelSize_y=0.005
+config.detectorList[0].pixelSize_x=0.0055
+config.detectorList[0].pixelSize_y=0.0055
 
 # Name of native coordinate system
 config.detectorList[0].transformDict.nativeSys='Pixels'
