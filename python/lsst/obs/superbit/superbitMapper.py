@@ -51,16 +51,24 @@ class SuperbitMapper(CameraMapper):
             self.mappings[name].keyDict.update(keys)
          
         #Define the filters in the filter registry
-        #I've just guessed these...
-        afwImageUtils.defineFilter(name='R',  lambdaEff=635.9, alias=['R'])
-        afwImageUtils.defineFilter(name='G',  lambdaEff=534.9, alias=['G'])
-        afwImageUtils.defineFilter(name='B',  lambdaEff=446.6, alias=['B'])
+        #obtained from https://sites.physics.utoronto.ca/bit/documentation/camera_lenses/palestine-filter-list
+        afwImageUtils.defineFilter(name='Luminance', lambdaEff=500, alias=['L'])
+        afwImageUtils.defineFilter(name='IR', lambdaEff=800, alias=['IR'])
+        afwImageUtils.defineFilter(name='Red', lambdaEff=650, alias=['R'])
+        afwImageUtils.defineFilter(name='Green',lambdaEff=550, alias=['G'])
+        afwImageUtils.defineFilter(name='Blue', lambdaEff=450, alias=['B'])
+        afwImageUtils.defineFilter(name='UV', lambdaEff=375, alias=['UV'])
         
         #Allocate the newly-defined filters
+        #Is this ok?
         self.filters = {}
+
+        self.filters['L'] = afwImage.Filter('L').getCanonicalName()
+        self.filters['IR'] = afwImage.Filter('IR').getCanonicalName()
         self.filters['R'] = afwImage.Filter('R').getCanonicalName()
         self.filters['G'] = afwImage.Filter('G').getCanonicalName()
         self.filters['B'] = afwImage.Filter('B').getCanonicalName()
+        self.filters['UV'] = afwImage.Filter('UV').getCanonicalName()
 
         #I'm not sure whether this is necessary, but it seems like a
         #good idea...

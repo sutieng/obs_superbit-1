@@ -18,8 +18,40 @@ processCcd.py --show config
 #This is just an example of how to change a parameter.
 #You don't have to write out the ISR image (but it
 #can be useful to do so).
-config.isr.doWrite = True
-config.isr.doBias = True
+
+# Apply bias frame correction?
+config.isr.doBias=True
+
+# Apply dark frame correction?
 config.isr.doDark=True
-config.isr.doFlat=True
+
+# Apply flat field correction?
+config.isr.doFlat=False
+
+# Apply fringe correction?
+config.isr.doFringe=False
+
+# Apply correction for CCD defects, e.g. hot pixels?
+config.isr.doDefect=False
+
+# Apply a distortion model based on camera geometry to the WCS?
+config.isr.doAddDistortionModel=True
+
+# Persist postISRCCD?
+config.isr.doWrite=False
+
+# Name of the bias data product
+config.isr.biasDataProductName='bias'
+
+# Name of the dark data product
+config.isr.darkDataProductName='dark'
+
+# Name of the flat data product
+config.isr.flatDataProductName='flat'
+
+# trim out non-data regions?
+config.isr.assembleCcd.doTrim=True
+
+# FITS headers to remove (in addition to DATASEC, BIASSEC, TRIMSEC and perhaps GAIN)
+config.isr.assembleCcd.keysToRemove=[]
 
