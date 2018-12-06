@@ -2,37 +2,42 @@ import lsst.afw.table as afwTable
 import lsst.afw.geom as afwGeom
 import numpy as np
 
-# This is copying from afw/tests/testAmpInfoTable.py:
+# This is the readout noise and gain of our amps:
 readout = [[12]]
-gain_all = [[0.31]]
+gain_all = [[0.31]]  ##not sure the value
 
 def addAmp(ampCatalog,i,rN,gain_s):
+    
     #Record the new amp:
     record = ampCatalog.addNew()
-
+    
     #This needs to be the full dimension of what your amp outputs,
     #including overscan, any dummy pixels etc etc.:
     width = 6665
     height = 4453
-
-    os = 20 #pixels of overscan
+    
+    os = 20   #pixels of overscan
     
     #This is the dimensions of the active region of your amp:
     bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(6576, 4384))
     
-    #we only have one amp, no need to shift
-    #bbox.shift(afwGeom.Extent2I(4088*i,0))
+    #If your CCD consists of more than one amp, you'll need to
+    #some of them (i.e., the one on the right is shifted by X pixels)
+    bbox.shift(afwGeom.Extent2I(3288 if (i==1 or i==3) else 0, 2192 if (i==2 or i==3) else 0))
     
+    #Define the gain, saturation and readout noise:
     gain = gain_s
-    saturation = 20000
+    saturation = 20000  ##not sure
     readNoise = rN
     
+    #Which corner is the data read out from?
     readoutCorner = afwTable.LL
+    
+    #I don't worry about linearity; maybe I should...
     linearityCoeffs = (1.0, np.nan, np.nan, np.nan)
     linearityType = "None"
     
     #This defines the full output dimensions of your amp:
-
     rawBBox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(width,height))
     rawXYOffset = afwGeom.Extent2I(0, 0)
     rawDataBBox = afwGeom.Box2I(afwGeom.Point2I(45  , 35), afwGeom.Extent2I(6576,4384))
@@ -40,12 +45,14 @@ def addAmp(ampCatalog,i,rN,gain_s):
     rawVerticalOverscanBBox = afwGeom.Box2I(afwGeom.Point2I(0, 4432), afwGeom.Extent2I(width, os))
     rawPrescanBBox = afwGeom.Box2I(afwGeom.Point2I(12, 0), afwGeom.Extent2I(os, height))
     emptyBox = afwGeom.BoxI()
-
+    
+    
     ##Don't need to shift since we only have one amp
     #shiftp = afwGeom.Extent2I((width)*i,0)
     #rawBBox.shift(shiftp)
     #rawDataBBox.shift(shiftp)
     #rawHorizontalOverscanBBox.shift(shiftp)
+
     
     #Add the defined information to the amp record:
     record.setHasRawInfo(True) #Sets the first Flag=True
@@ -71,7 +78,7 @@ def makeCcd(ccdId):
         Make a CCD out of a set of amps
         Remove the for loop if you only have one amp
         per CCD.
-    '''
+        '''
     schema = afwTable.AmpInfoTable.makeMinimalSchema()
     ampCatalog = afwTable.AmpInfoCatalog(schema)
     for i in range(1):
@@ -82,7 +89,7 @@ def main():
     '''
         Make a set of CCDs.
         Remove the for loop if you only have one CCD.
-    '''
+        '''
     for i in range(1):
         camera = makeCcd(i)
 
