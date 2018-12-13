@@ -35,7 +35,7 @@ config.isr.doFringe=False
 config.isr.doDefect=False
 
 # Apply a distortion model based on camera geometry to the WCS?
-config.isr.doAddDistortionModel=True
+config.isr.doAddDistortionModel=False
 
 # Persist postISRCCD?
 config.isr.doWrite=False
