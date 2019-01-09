@@ -23,7 +23,7 @@ class MakeSuperbitRawVisitInfo(MakeRawVisitInfo):
         """
         #I believe the names in capitals come from the header. You'll need
         #to change these to reflect your header keywords.
-        startDate = self.popIsoDate(md, "DATE-OBS")
+        startDate = self.popIsoDate(md, "DATE_OBS")
         argDict["date"] = self.offsetDate(startDate, 0.5*argDict["exposureTime"])
         argDict["boresightAzAlt"] = SpherePoint(
             self.popAngle(md, "AZ"),
