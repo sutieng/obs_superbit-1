@@ -6,7 +6,8 @@ import re
 class SuperbitCalibsParseTask(CalibsParseTask):
 
     def _translateFromCalibId(self, field, md):
-        data = md.get("CALIB_ID")
+        # data = md.get("CALIB_ID") --- this kw doesn't exist (JEM)
+        data = md.get("OBS_TYPE")
         match = re.search(".*%s=(\S+)" % field, data)
         return match.groups()[0]
     
