@@ -4,7 +4,8 @@ config.parse.retarget(SuperbitParseTask)
 config.parse.translation = {'dataType':'OBSTYPE',
                             'expTime':'EXPTIME',
                             'filter':'FILTER',
-                            'visit':'FRAMEID'}
+                            'visit':'FRAMEID',
+                            'ccd' : 'DETNAME'}
 
 config.parse.translators = {'dateObs':'translateDate',
                             'taiObs':'translateDate'}
@@ -18,5 +19,6 @@ config.register.columns = {'visit':'int',
                            'dataType':'text',
                            'expTime':'double',
                            'dateObs':'text',
-                           'taiObs':'text'}
+                           'taiObs':'text',
+                            'ccd' : 'text'}
 
