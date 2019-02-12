@@ -73,5 +73,5 @@ makeDiscreteSkyMap.py DATA --rerun outSFD:outMDSM --id filter=G --clobber-config
 coaddDriver.py DATA --id filter=G --cores 6 --rerun outMDSM:outCD --clobber-config
 multiBandDriver.py DATA --id filter=L dateObs=2018-07-22 --cores 6 --rerun outCD:outMBD --clobber-config
 ```
-
 Other filters can be processed via `filter=X` within the `--id` block.  
+Note that the constructXXX.py routines assume you are running one level up from DATA, not within DATA
