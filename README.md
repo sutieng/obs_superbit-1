@@ -47,7 +47,7 @@ In summary, the following block of bash commands will:
 - process the exposures, including source detection;
 - coadd the exposures to create a deep coadd, and perform source detection on coadd.
 
-Assuming all your raw data is contained within `./rawData`:
+Assuming all your raw data (both science and calibration files!) is contained within `./rawData`:
 ```
 #!/bin/bash
 mkdir -p DATA/CALIB
@@ -56,6 +56,10 @@ echo "lsst.obs.superbit.superbitMapper.SuperbitMapper" > DATA/_mapper
 ingestImages.py DATA ./rawData/*.fits --mode=link --ignore-ingested
 
 constructBias.py DATA --calib DATA/CALIB --output=Cals --id dataType=BIAS --cores=6 --clobber-config
+```
+Or, if you are running on a machine without a batch system for jobs, e.g. a laptop:
+```
+constructBias.py DATA --calib DATA/CALIB --output=Cals --id dataType=Bias --batch-type=None --cores=2 --clobber-config
 ingestCalibs.py DATA --calib DATA/CALIB 'Cals/BIAS/*/NONE/*.fits' --validity 180
 
 constructDark.py DATA --calib DATA/CALIB --output=Cals --id dataType=DARK --cores=6 --clobber-config
