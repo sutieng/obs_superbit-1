@@ -39,6 +39,10 @@ Once `obs_superbit` has been declared, it can be setup, which must be done in or
 setup obs_superbit
 ```
 
+First, in ```camera``` directory, build a model of your detector:
+```
+python buildDetector.py
+```
 Once setup, you can use `obs_superbit` to process your SuperBIT data with the LSST stack.
 
 In summary, the following block of bash commands will:
