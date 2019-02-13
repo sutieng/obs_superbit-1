@@ -64,10 +64,10 @@ constructBias.py DATA --calib DATA/CALIB --output=Cals --id dataType=BIAS --core
 Or, if you are running on a machine without a batch system for jobs, e.g. a laptop:
 ```
 constructBias.py DATA --calib DATA/CALIB --output=Cals --id dataType=Bias --batch-type=None --cores=2 --clobber-config
-ingestCalibs.py DATA --calib DATA/CALIB 'Cals/BIAS/*/NONE/*.fits' --validity 180
+ingestCalibs.py DATA --calib DATA/CALIB 'Cals/BIAS/*/*.fits' --validity 180
 
 constructDark.py DATA --calib DATA/CALIB --output=Cals --id dataType=DARK --cores=6 --clobber-config
-ingestCalibs.py DATA --calib DATA/CALIB 'Cals/DARK/*/NONE/*.fits' --validity 180
+ingestCalibs.py DATA --calib DATA/CALIB 'Cals/DARK/*/*.fits' --validity 180
 
 constructFlat.py DATA --calib DATA/CALIB --output=Cals --id dataType=FLAT filter=G --cores=6 --clobber-config
 ingestCalibs.py DATA --calib DATA/CALIB 'Cals/FLAT/*/*/*.fits' --validity 180 --config clobber=True
