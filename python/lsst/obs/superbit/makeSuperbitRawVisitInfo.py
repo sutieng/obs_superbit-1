@@ -1,6 +1,7 @@
 from lsst.afw.geom import degrees, SpherePoint
 from lsst.afw.coord import Observatory
 from lsst.obs.base import MakeRawVisitInfo
+import pdb
 
 __all__ = ["MakeSuperbitRawVisitInfo"]
 
@@ -24,13 +25,14 @@ class MakeSuperbitRawVisitInfo(MakeRawVisitInfo):
         #I believe the names in capitals come from the header. You'll need
         #to change these to reflect your header keywords.
         startDate = self.popIsoDate(md, "DATE_OBS")
+        argDict["exposureTime"] = self.popFloat(md, 'EXPTIME')
+        argDict['darkTime'] = argDict['exposureTime']
+
         argDict["date"] = self.offsetDate(startDate, 0.5*argDict["exposureTime"])
         argDict["boresightAzAlt"] = SpherePoint(
             self.popAngle(md, "AZ"),
-            self.popAngle(md, "ALT"),
+            self.popAngle(md, "EL"),
         )
-        argDict["boresightAirmass"] = self.popFloat(md, "AIRMASS")
+        #argDict["boresightAirmass"] = self.popFloat(md, "AIRMASS")
         argDict["observatory"] = self.observatory
-        argDict["exposureTime"] = self.popFloat(md, 'EXPTIME')
-        argDict['darkTime'] = argDict['exposureTime']
         

@@ -77,12 +77,20 @@ def makeCcd(ccdId):
         Make a CCD out of a set of amps
         Remove the for loop if you only have one amp
         per CCD.
+
+        note that the name used to be set to 'ccd0_superbit.fits' in
+        ampCatalog.writeFits('ccd%s_superbit.fits' %ccdId) (ccdId=0)
+        That causes problems since 'ccd0_superbit' never 
+        appears in header of calib/data files, so not useful as identifier 
+
+        Changed writeFits to 'superbitccd', which \does\ appear in header
         '''
     schema = afwTable.AmpInfoTable.makeMinimalSchema()
     ampCatalog = afwTable.AmpInfoCatalog(schema)
     for i in range(1):
-        addAmp(ampCatalog, i,readout[ccdId][i],gain_all[ccdId][i])
-    return ampCatalog.writeFits('ccd%s_superbit.fits' %ccdId)
+        addAmp(ampCatalog,i,readout[ccdId][i],gain_all[ccdId][i])
+
+    return ampCatalog.writeFits('superbitccd.fits')
 
 def main():
     '''

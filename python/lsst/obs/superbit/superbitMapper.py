@@ -5,6 +5,7 @@ from lsst.obs.base import CameraMapper
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.image as afwImage
 from .makeSuperbitRawVisitInfo import MakeSuperbitRawVisitInfo
+import pdb
 
 class SuperbitMapper(CameraMapper):
     """
@@ -41,7 +42,8 @@ class SuperbitMapper(CameraMapper):
                 'dataType':str,
                 'expTime':float,
                 'dateObs':str,
-                'taiObs':str}
+                'taiObs':str
+                    }
         for name in ("raw",
                      "postISRCCD",
                      "calexp",
@@ -52,6 +54,7 @@ class SuperbitMapper(CameraMapper):
          
         #Define the filters in the filter registry
         #obtained from https://sites.physics.utoronto.ca/bit/documentation/camera_lenses/palestine-filter-list
+        afwImageUtils.defineFilter(name='Open', lambdaEff=500, alias=['O'])
         afwImageUtils.defineFilter(name='Luminance', lambdaEff=500, alias=['L'])
         afwImageUtils.defineFilter(name='IR', lambdaEff=800, alias=['IR'])
         afwImageUtils.defineFilter(name='Red', lambdaEff=650, alias=['R'])
@@ -62,7 +65,8 @@ class SuperbitMapper(CameraMapper):
         #Allocate the newly-defined filters
         #Is this ok?
         self.filters = {}
-
+        
+        self.filters['O'] = afwImage.Filter('O').getCanonicalName()
         self.filters['L'] = afwImage.Filter('L').getCanonicalName()
         self.filters['IR'] = afwImage.Filter('IR').getCanonicalName()
         self.filters['R'] = afwImage.Filter('R').getCanonicalName()
@@ -72,4 +76,43 @@ class SuperbitMapper(CameraMapper):
 
         #I'm not sure whether this is necessary, but it seems like a
         #good idea...
-        self.defaultFilterName = 'R'
+        self.defaultFilterName = 'O'
+        
+    def _computeCcdExposureId(self, dataId):
+        """Compute the 64-bit identifier for a CCD exposure.
+        @param dataId (dict) Data identifier with visit and CCD
+        
+        We uniquely identify an exposure via its visit ID (i.e., r******) and its ccd (UT number).
+        We allow for up to 2**24 = 16,777,216 visits, and up to 2**6 = 64 UTs
+        The first 34 (right to left) bits give the object ID (overkill).
+        The next 6 give the UT.
+        The next 24 give the visit number.
+        If you want to add a filter code (up to 2**3 = 8 filters, say):
+        return visit*64*8 + filt*64 + ccd
+        Then add 3 to the 30 in bypass_ccdExposureId_bits
+        """
+        
+        pathId = self._transformId(dataId)
+        visit = pathId['visit']
+        ccd = pathId['ccd']
+        visit = int(visit)
+        if ccd in 'superbitccd': 
+            ccd = int(1)
+
+        return visit*64 + ccd
+
+    def bypass_ccdExposureId(self, datasetType, pythonType, location, dataId):
+        
+        return self._computeCcdExposureId(dataId)
+
+    def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
+        return 24+6
+    
+    def _extractDetectorName(self, dataId):
+        """ orginally was %(ccd)d but failed"""
+        #ccdInstance="%(ccd)s" % dataId
+        #if ccdInstance in 'superbitccd': 
+        #    ccdInstance = int(1)
+
+        return ("%(ccd)s" % dataId)
+

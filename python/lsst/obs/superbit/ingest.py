@@ -2,17 +2,22 @@ from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from lsst.pipe.tasks.ingest import ParseTask
 from astropy.time import Time
 import re
+import pdb
 
 class SuperbitCalibsParseTask(CalibsParseTask):
 
     def _translateFromCalibId(self, field, md):
-        # data = md.get("CALIB_ID") --- this kw doesn't exist (JEM)
-        data = md.get("OBS_TYPE")
+        data = md.get("CALIB_ID") #--- this kw doesn't exist (JEM)
+        #data = md.get("OBS_TYPE")
         match = re.search(".*%s=(\S+)" % field, data)
         return match.groups()[0]
     
-    def translate_ccd(self, md):
+    def translate_ccd(self,md):
+        """ 
+        The line below didn't work, so I'm trying a new approach
+        """
         return self._translateFromCalibId("ccd", md)
+        
 
     def translate_filter(self, md):
         return self._translateFromCalibId("filter", md)
@@ -34,3 +39,9 @@ class SuperbitParseTask(ParseTask):
         date = date.strip()[:10]
 
         return date
+    
+    def translateCcd(self, md):
+        """ unclear if returning a string is OK """
+        ccd = md.get("DETNAME")
+        #return int(ccd.strip('UT'))
+        return ccd

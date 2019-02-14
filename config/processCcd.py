@@ -32,7 +32,7 @@ config.isr.doFlat=False
 config.isr.doFringe=False
 
 # Apply correction for CCD defects, e.g. hot pixels?
-config.isr.doDefect=False
+config.isr.doDefect=True
 
 # Apply a distortion model based on camera geometry to the WCS?
 config.isr.doAddDistortionModel=False
