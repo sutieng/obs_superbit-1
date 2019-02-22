@@ -47,16 +47,16 @@ exposures:
          persistable: DecoratedImageF
          template: raw/%(dateObs)s/%(filter)s/%(dataType)s-%(visit)s.fits
        postISRCCD:
-         template: postISRCCD/%(dateObs)s/%(filter)s/postISRCCD-%(ccd)s-%(visit)s-%(run)s.fits
+         template: postISRCCD/%(dateObs)s/%(filter)s/postISRCCD-%(ccd)s-%(visit)s.fits
          recipe: lossyBasic
        calexp:
-         template: sci-results/%(dateObs)s/%(filter)s/calexp/calexp-%(ccd)s-%(run)s.fits
+         template: sci-results/%(dateObs)s/%(filter)s/calexp/calexp-%(ccd)s.fits
          recipe: lossyBasic
 #     icExp:
 #         columns:
 #               - visit
 #               - ccd
-#          template: sci-results/%(dateObs)s/%(filter)s/icExp/icExp-%(ccd)s-%(run)s.fits
+#          template: sci-results/%(dateObs)s/%(filter)s/icExp/icExp-%(ccd)s.fits
 
 calibrations:
        bias:
@@ -106,11 +106,11 @@ calibrations:
 
 datasets:
        icExpBackground:
-         template: 'sci-results/%(dateObs)s/%(filter)s/icExp/bkgd-icExp-%(ccd)s-%(run)s.fits'
+         template: 'sci-results/%(dateObs)s/%(filter)s/icExp/bkgd-icExp-%(ccd)s.fits'
        calexpBackground:
-         template: 'sci-results/%(dateObs)s/%(filter)s/calexp/bkgd-calexp-%(ccd)s-%(run)s.fits'
+         template: 'sci-results/%(dateObs)s/%(filter)s/calexp/bkgd-calexp-%(ccd)s.fits'
        src:
-         template: 'sci-results/%(dateObs)s/%(filter)s/calexp/bkgd-calexp-%(ccd)s-%(run)s.fits'
+         template: 'sci-results/%(dateObs)s/%(filter)s/calexp/bkgd-calexp-%(ccd)s.fits'
        icSrc:
          template: 'sci-results/%(dateObs)s/%(filter)s/icSrc/icSrc-%(ccd)s-%(visit)s.fits'
        srcMatch:

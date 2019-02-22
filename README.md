@@ -39,6 +39,10 @@ Once `obs_superbit` has been declared, it can be setup, which must be done in or
 setup obs_superbit
 ```
 
+First, in ```camera``` directory, build a model of your detector:
+```
+python buildDetector.py
+```
 Once setup, you can use `obs_superbit` to process your SuperBIT data with the LSST stack.
 
 In summary, the following block of bash commands will:
@@ -47,7 +51,7 @@ In summary, the following block of bash commands will:
 - process the exposures, including source detection;
 - coadd the exposures to create a deep coadd, and perform source detection on coadd.
 
-Assuming all your raw data is contained within `./rawData`:
+Assuming all your raw data (both science and calibration files!) is contained within `./rawData`:
 ```
 #!/bin/bash
 mkdir -p DATA/CALIB
@@ -56,18 +60,22 @@ echo "lsst.obs.superbit.superbitMapper.SuperbitMapper" > DATA/_mapper
 ingestImages.py DATA ./rawData/*.fits --mode=link --ignore-ingested
 
 constructBias.py DATA --calib DATA/CALIB --output=Cals --id dataType=BIAS --cores=6 --clobber-config
-ingestCalibs.py DATA --calib DATA/CALIB 'Cals/BIAS/*/NONE/*.fits' --validity 180
+```
+Or, if you are running on a machine without a batch system for jobs, e.g. a laptop:
+```
+constructBias.py DATA --calib DATA/CALIB --output=Cals --id dataType=Bias --batch-type=None --cores=2 --clobber-config
+ingestCalibs.py DATA --calib DATA/CALIB 'Cals/BIAS/*.fits' --validity 180
 
-constructDark.py DATA --calib DATA/CALIB --output=Cals --id dataType=DARK --cores=6 --clobber-config
-ingestCalibs.py DATA --calib DATA/CALIB 'Cals/DARK/*/NONE/*.fits' --validity 180
+constructDark.py DATA --calib DATA/CALIB --output=Cals --id dataType=Dark --batch-type=None --cores=2 --clobber-config
+ingestCalibs.py DATA --calib DATA/CALIB 'Cals/DARK/*.fits' --validity 180
 
-constructFlat.py DATA --calib DATA/CALIB --output=Cals --id dataType=FLAT filter=G --cores=6 --clobber-config
-ingestCalibs.py DATA --calib DATA/CALIB 'Cals/FLAT/*/*/*.fits' --validity 180 --config clobber=True
+constructFlat.py DATA --calib DATA/CALIB --output=Cals --id dataType=Flat filter=G --batch-type=None --cores=2 --clobber-config
+ingestCalibs.py DATA --calib DATA/CALIB 'Cals/FLAT/*/*.fits' --validity 180 --config clobber=True
 
 singleFrameDriver.py DATA --rerun outSFD --calib DATA/CALIB --id filter=G --clobber-config --cores 6
 makeDiscreteSkyMap.py DATA --rerun outSFD:outMDSM --id filter=G --clobber-config
 coaddDriver.py DATA --id filter=G --cores 6 --rerun outMDSM:outCD --clobber-config
 multiBandDriver.py DATA --id filter=L dateObs=2018-07-22 --cores 6 --rerun outCD:outMBD --clobber-config
 ```
-
 Other filters can be processed via `filter=X` within the `--id` block.  
+Note that the constructXXX.py routines assume you are running one level up from DATA, not within DATA

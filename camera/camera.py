@@ -38,7 +38,7 @@ config.detectorList[0].bbox_x1=6575
 config.detectorList[0].bbox_x0=0
 
 # Name of detector slot
-config.detectorList[0].name='ccd0_superbit'
+config.detectorList[0].name='superbitccd'
 
 # Pixel size in mm
 config.detectorList[0].pixelSize_x=0.005
