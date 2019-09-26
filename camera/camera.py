@@ -1,8 +1,12 @@
 import lsst.afw.cameraGeom.cameraConfig
 
+#This simply asserts whether the config class is of the
+#right format.
+assert type(config)==lsst.afw.cameraGeom.cameraConfig.CameraConfig, 'config is of type %s.%s instead of lsst.afw.cameraGeom.cameraConfig.CameraConfig' % (type(config).__module__, type(config).__name__)
+
 #Set the plate scale in arcsec/mm:
 #Not strictly necessary.
-#config.plateScale=206.67
+config.plateScale=37.5
 
 #This defines the native coordinate system:
 #FocalPlane is (x,y) in mm (rather than radians or pixels, for example).
